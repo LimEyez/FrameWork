@@ -12,47 +12,47 @@ class Graph3D {
 
     zoom(delta) {
         return [
-             [delta, 0, 0, 0],
-             [0, delta, 0, 0],
-             [0, 0, delta, 0],
-             [0, 0, 0, 1]
-            ]
+            [delta, 0, 0, 0],
+            [0, delta, 0, 0],
+            [0, 0, delta, 0],
+            [0, 0, 0, 1]
+        ]
     }
 
-    move(dx, dy, dz) { 
+    move(dx, dy, dz) {
         return [
-         [1, 0, 0, 0],
-         [0, 1, 0, 0],
-         [0, 0, 1, 0],
-         [dx, dy, dz, 1]
+            [1, 0, 0, 0],
+            [0, 1, 0, 0],
+            [0, 0, 1, 0],
+            [dx, dy, dz, 1]
         ]
     }
 
     rotateOy(alpha) {
         return [
-         [1, 0, 0, 0],
-         [0, Math.cos(alpha), Math.sin(alpha), 0],
-         [0, -(Math.sin(alpha)), Math.cos(alpha), 0],
-         [0, 0, 0, 1]
+            [1, 0, 0, 0],
+            [0, Math.cos(alpha), Math.sin(alpha), 0],
+            [0, -(Math.sin(alpha)), Math.cos(alpha), 0],
+            [0, 0, 0, 1]
         ]
     }
 
     rotateOx(alpha) {
         return [
-         [Math.cos(alpha), 0, -(Math.sin(alpha)), 0],
-         [0, 1, 0, 0],
-         [Math.sin(alpha), 0, Math.cos(alpha), 0],
-         [0, 0, 0, 1]
+            [Math.cos(alpha), 0, -(Math.sin(alpha)), 0],
+            [0, 1, 0, 0],
+            [Math.sin(alpha), 0, Math.cos(alpha), 0],
+            [0, 0, 0, 1]
         ]
     }
 
     rotateOz(alpha) {
         return [
-             [cos(alpha), 0, -sin(alpha), 0],
-             [0, 1, 0, 0],
-             [sin(alpha), 0, cos(alpha), 0],
-             [0, 0, 0, 1]
-            ]
+            [cos(alpha), 0, -sin(alpha), 0],
+            [0, 1, 0, 0],
+            [sin(alpha), 0, cos(alpha), 0],
+            [0, 0, 0, 1]
+        ]
     }
 
     transformation(matrix, point) {
@@ -104,29 +104,50 @@ class Graph3D {
         return newMatrix;
     }
 
+    zero() {
+        return [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]];
+    }
+
+    one() {
+        return [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]];
+    }
+
+    mult(a, b) {
+        const c = this.zero();
+        for (let i = 0; i < 4; i++) {
+            for (let j = 0; j < 4; j++) {
+                let s = 0;
+                for (let k = 0; k < 4; k++) {
+                    s += a[i][k] * b[k][j];
+                }
+                c[i][j] = s;
+            }
+        }
+        return c;
+    }
+
     multVector(points, figure) {
         const point = figure.points
         const normal = {
-            x: (point[points[1]].y-point[points[2]].y) * (point[points[3]].z-point[points[2]].z) - (point[points[1]].z-point[points[2]].z) * (point[points[3]].y-point[points[2]].y),
-            y: (point[points[1]].z-point[points[2]].z) * (point[points[3]].x-point[points[2]].x) - (point[points[1]].x-point[points[2]].x) * (point[points[3]].z-point[points[2]].z),
-            z: (point[points[1]].x-point[points[2]].x) * (point[points[3]].y-point[points[2]].y) - (point[points[1]].y-point[points[2]].y) * (point[points[3]].x-point[points[2]].x),
+            x: (point[points[1]].y - point[points[2]].y) * (point[points[3]].z - point[points[2]].z) - (point[points[1]].z - point[points[2]].z) * (point[points[3]].y - point[points[2]].y),
+            y: (point[points[1]].z - point[points[2]].z) * (point[points[3]].x - point[points[2]].x) - (point[points[1]].x - point[points[2]].x) * (point[points[3]].z - point[points[2]].z),
+            z: (point[points[1]].x - point[points[2]].x) * (point[points[3]].y - point[points[2]].y) - (point[points[1]].y - point[points[2]].y) * (point[points[3]].x - point[points[2]].x),
         }
         return normal;
     }
 
-    sortByVector(normal, camera, check){
+    sortByVector(normal, camera, check) {
         const a = normal;
         const b = camera;
-        const resault = 
-        (a.x * b.x + a.y * b.y + a.z * b.z) / 
-        (Math.sqrt(Math.pow(a.x, 2) + Math.pow(a.y, 2) + Math.pow(a.z, 2)) * Math.sqrt(Math.pow(b.x, 2) + Math.pow(b.y, 2) + Math.pow(b.z, 2)));
-        if ((Math.acos(resault) >= 0 && Math.acos(resault) <= 7*Math.PI/12) || check ) {
+        const resault =
+            (a.x * b.x + a.y * b.y + a.z * b.z) /
+            (Math.sqrt(Math.pow(a.x, 2) + Math.pow(a.y, 2) + Math.pow(a.z, 2)) * Math.sqrt(Math.pow(b.x, 2) + Math.pow(b.y, 2) + Math.pow(b.z, 2)));
+        if ((Math.acos(resault) >= 0 && Math.acos(resault) <= 7 * Math.PI / 12) || check) {
             return true
         }
         else {
             return false
         }
-
     }
 
 }

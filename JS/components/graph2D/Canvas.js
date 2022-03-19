@@ -1,5 +1,5 @@
 class Canvas {
-    constructor({callbacks, WIN, id, width, height}){ 
+    constructor({ callbacks, WIN, id, width, height }) {
         this.WIN = WIN;
         this.canvas = document.getElementById(id);
         this.canvas.width = width;
@@ -13,7 +13,7 @@ class Canvas {
     }
 
     xs(x) {
-        return this.canvas.width * (x-this.WIN.LEFT) / this.WIN.WIDTH
+        return this.canvas.width * (x - this.WIN.LEFT) / this.WIN.WIDTH
     }
 
     ys(y) {
@@ -23,7 +23,7 @@ class Canvas {
     sx(x) {
         return x * this.WIN.WIDTH / this.canvas.width;
     }
-  
+
     sy(y) {
         return y * this.WIN.HEIGHT / this.canvas.height;
     }
@@ -45,63 +45,63 @@ class Canvas {
         }
         this.context.lineWidth = width;
         this.context.globalAlpha = 1;
-        this.context.moveTo (this.xs(x1), this.ys(y1));
-        this.context.lineTo (this.xs(x2), this.ys(y2));
+        this.context.moveTo(this.xs(x1), this.ys(y1));
+        this.context.lineTo(this.xs(x2), this.ys(y2));
         this.context.stroke();
     };
 
+    text(str, x, y, size = 18, color = 'black') {
+        this.context.beginPath();
+        this.context.font = `italic ${size}pt cursive`;
+        this.context.fillStyle = color;
+        this.context.fillText(str, this.xs(x), this.ys(y));
+        this.context.closePath();
+
+    }
+
     //Локация нумерации
     locatenum(i, x1, y1) {
-        if (i == 0){
-            this.context.beginPath();
-            this.context.font="italic 18pt cursive";
-            this.context.fillStyle = "red";
-            this.context.fillText(i, this.xs(x1), this.ys(y1));
-            this.context.closePath();
-        }
-        else{
-            this.context.beginPath();
-            this.context.font="italic 15pt cursive";
-            this.context.fillStyle = "black";
-            this.context.fillText(i, this.xs(x1), this.ys(y1));
-            this.context.closePath();
+        if (i) {
+            this.text(i, x1, y1, 15);
+        } else {
+            this.text(i, x1, y1, 18, 'red');
         }
     }
 
     //Вырисовка 0 функции
     printzero(x) {
-            this.context.beginPath();
-            this.context.strokeStyle = "red";
-            this.context.fillStyle = "red";
-            this.context.globalAlpha = 1;
-            this.context.arc(this.xs(x), this.ys(0), 3, Math.PI * 0, Math.PI *2, true);
-            this.context.closePath();
-            this.context.fill();
-            this.context.stroke();
-        };
+        this.context.beginPath();
+        this.context.strokeStyle = "red";
+        this.context.fillStyle = "red";
+        this.context.globalAlpha = 1;
+        this.context.arc(this.xs(x), this.ys(0), 3, Math.PI * 0, Math.PI * 2, true);
+        this.context.closePath();
+        this.context.fill();
+        this.context.stroke();
+    };
 
-    
+
     printpoint(x, y) {
         this.context.beginPath();
         this.context.strokeStyle = "green";
         this.context.fillStyle = "green";
         this.context.globalAlpha = 1;
-        this.context.arc(this.xs(x), this.ys(y), 2, Math.PI * 0, Math.PI *2, true);
+        this.context.arc(this.xs(x), this.ys(y), 2, Math.PI * 0, Math.PI * 2, true);
         this.context.closePath();
         this.context.fill();
         this.context.stroke();
     };
-    
+
     XY() {
         this.context.beginPath();
         this.context.fillStyle = "black";
-        this.context.font="italic 12pt cursive";
-        this.context.fillText('X', this.canvas.width-15, this.canvas.height/2+35);
-        this.context.fillText('Y', this.canvas.width/2 + 30, 25);
+        this.context.font = "italic 12pt cursive";
+        this.context.fillText('X', this.canvas.width - 15, this.canvas.height / 2 + 35);
+        this.context.fillText('Y', this.canvas.width / 2 + 30, 25);
         this.context.closePath();
     }
 
-    polygon(points, color = '#FF800055'){ // псоледние 55 - прозрачности
+    polygon(points, color = '#FF800055') { // псоледние 55 - прозрачности
         this.context.fillStyle = color;
         this.context.beginPath();
         this.context.moveTo(this.xs(points[0].x), this.ys(points[0].y));

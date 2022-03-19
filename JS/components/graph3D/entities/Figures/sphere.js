@@ -1,21 +1,8 @@
-figure.prototype.Sphere = (color, R = 10, count = 20) => {
-    const animations = [
-        {
-            method: "rotateOx",
-            value: 0.02,
-            center: new Point(10, 0 , 0)
-        }
-        // ,
-        // {
-        //     method: "rotateOx",
-        //     value: 0.01,
-        //     center: new Point(-10, 5 , 0)
-        // }
-    ];
+figure.prototype.Sphere = (animations, color, R = 10, count = 20, ) => {
     const points = [];
     const edges = [];
     const polygons = [];
-    const center = new Point(10, 0, 0)
+    //const center = new Point(10, 0, 0)
     const twoPi = 2 * Math.PI;
 
     let t = 0;
@@ -64,6 +51,6 @@ figure.prototype.Sphere = (color, R = 10, count = 20) => {
     }
 
 
-    return new Subject(points, edges, polygons, animations, center)
+    return new Subject(points, edges, polygons, animations)
 
 }

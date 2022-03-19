@@ -1,13 +1,6 @@
 class Graph3DComponent extends Component {
     constructor(options) {
-
-        setInterval( () => {
-            if (this.animation)
-                this.goAnimation();
-                this.render();
-        }, 17) 
-
-        super(options)
+        super(options);
         this.WIN = {
             LEFT: -10,
             BOTTOM: -10,
@@ -49,7 +42,6 @@ class Graph3DComponent extends Component {
             width: 800,
             height: 800,
             graph3D: this.graph3D,
-
         });
 
         this.ui = new UI3DComponent({
@@ -76,8 +68,29 @@ class Graph3DComponent extends Component {
         // this.figure = (new figure).HyperbolicCylinder();
         //this.figures = [(new figure).Cube('#e66465')]
         this.figures.push((new figure)["Sphere"]('#e66465'))
-        this.render();
         //========================================================
+
+        let FPS = 0;
+        this.FPS = 0;
+        let lastTimestamp = Date.now();
+
+        const animLoop = () => {
+            // calc fps            
+            FPS++;
+            const timestamp = Date.now();
+            if (timestamp - lastTimestamp >= 1000) {
+                this.FPS = FPS;
+                FPS = 0;
+                lastTimestamp = timestamp;
+            }
+            // print scene
+            if (this.animation) {
+                this.goAnimation();
+            }
+            this.render();
+            requestAnimFrame(animLoop);
+        }
+        animLoop();
     }
 
     _addEventListeners() {
@@ -87,20 +100,16 @@ class Graph3DComponent extends Component {
         document.getElementById('polygons').addEventListener('click', () => this.polyCheck(this.polyT));
         document.getElementById('moveLight').addEventListener('click', () => this.checklight());
         document.getElementById('power').addEventListener('mousemove', () => this.correctionLumen());
-        document.getElementById('cleanfigures').addEventListener('click', () => { this.figures = []; this.render() });
+        document.getElementById('cleanfigures').addEventListener('click', () => this.figures = []);
         document.getElementById('animation').addEventListener('click', () => this.checkAnimation());
     }
 
-    
-
     correctionLumen() {
         this.LIGHT.lumen = this.power.value;
-        this.render()
     }
- 
+
     createFigure(name = '', color) {
         this.figures.push((new figure)[name](color));
-        this.render();
     }
 
     //===============================================
@@ -118,34 +127,33 @@ class Graph3DComponent extends Component {
     checkAnimation() {
         if (this.animation) {
             this.animation = false;
-        }
-        else {
+        } else {
             this.animation = true;
             this.figures = [];
-            this.figures.push((new figure)["Sphere"]('#e66465'));
-            this.figures.forEach(figure => {
-                figure.animations.forEach(animation => {
-                    let center = animation.center;
-                    this.moveScene(figure, -center.x, -center.y, center.z)
-                })
-            })
-            this.render;
+            this.figures.push((new figure)["Sphere"]([
+                {
+                    method: "rotateOx",
+                    value: 0.02,
+                    center: new Point(10, 0, 0)
+                }, {
+                    method: "rotateOx",
+                    value: -0.01,
+                    //center: new Point(-10, 5, 0)
+                }
+            ], '#e66465'));
         }
     }
 
     pointCheck() {
         this.pointT = !this.pointT;
-        this.render()
     }
 
     edgeCheck(edge) {
         edge == 0 ? this.edgeT = 1 : this.edgeT = 0;
-        this.render()
     }
 
     polyCheck(poly) {
         poly == 0 ? this.polyT = 1 : this.polyT = 0;
-        this.render()
     }
     //===============================================
 
@@ -159,7 +167,6 @@ class Graph3DComponent extends Component {
                 this.graph3D.transformation(matrix, point)
             );
         })
-        this.render();
     }
 
     mousedown(event) {
@@ -198,27 +205,25 @@ class Graph3DComponent extends Component {
             }
             this.dx = event.offsetX;
             this.dy = event.offsetY;
-            this.render();
         }
     }
 
     goAnimation() {
-
         this.figures.forEach(figure => {
-            //console.log(figure);
-            figure.animations.forEach (animation => {
-                let center = (animation.center || figure.center);
-                this.moveScene(figure, center.x, center.y, center.z); 
-                const matrix  = this.graph3D[animation.method](animation.value);
-    //----------------------------------------
-                figure.points.forEach(point => {
-                    point = this.graph3D.transformation(matrix, point);    //  X   (для reduce)
-                    //console.log(animation, center)
-    //----------------------------------------
-                    // матрица1 * матрица2 * матрица3 - запоминаем и применяем один раз методом transformation
-                });
-                this.moveScene(figure, -center.x, -center.y, -center.z);
-            });
+            const matrix = figure.animations.reduce(
+                (S, animation) => {
+                    const center = animation.center || figure.center;
+                    const m1 = this.graph3D.move(center.x, center.y, center.z);
+                    const m2 = this.graph3D[animation.method](animation.value);
+                    const m3 = this.graph3D.move(-center.x, -center.y, -center.z);
+                    return this.graph3D.mult(
+                        S, 
+                        this.graph3D.mult(this.graph3D.mult(m1, m2), m3)
+                    );
+                },
+                this.graph3D.one()
+            );
+            figure.points.forEach(point => this.graph3D.transformation(matrix, point));
         });
     }
 
@@ -230,7 +235,6 @@ class Graph3DComponent extends Component {
         if (this.moveLight) {
             this.graph3D.transformation(matrix, this.LIGHT)
         }
-        this.render();
     }
 
     keyDownHandler(event) {
@@ -265,7 +269,7 @@ class Graph3DComponent extends Component {
             this.allPolygons.forEach(polygon => {
                 const figure = this.figures[polygon.figureIndex];
                 polygon.normal = this.graph3D.multVector(polygon.points, figure);
-                const points = polygon.points.map(point => { 
+                const points = polygon.points.map(point => {
                     return {
                         x: this.graph3D.xs(figure.points[point]),
                         y: this.graph3D.ys(figure.points[point])
@@ -305,13 +309,12 @@ class Graph3DComponent extends Component {
             }
             if (this.pointT) {
                 figure.points.forEach(point => {
-                    console.log(point)
                     let x = this.graph3D.xs(point);
                     let y = this.graph3D.ys(point);
                     this.canvas3D.printpoint(x, y)
-                }
-                );
+                });
             }
-        })
+        });
+        this.canvas3D.text(`FPS = ${this.FPS}`, -9, 9, 18);
     };
 }
