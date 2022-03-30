@@ -28,13 +28,13 @@ class UIComponent extends Component {
         
         const inputX = document.createElement('input');
         inputX.setAttribute('placeholder', `Значение f(X)`);
-        inputX.setAttribute('class', 'secondelem3');
+        inputX.setAttribute('class', 'class = "butfig butfig-three"');
         inputX.addEventListener('keyup', () => this.keyup(input, false, inputfirst, inputdouble, id, inputX));
         //Добавить ввод для функции
         this.cmd = false;
         let input = document.createElement('input');
         input.setAttribute('placeholder', `function №${this.num}`);
-        input.setAttribute('class', 'secondelem');
+        input.setAttribute('class', 'class = "butfig butfig-three"');
         input.dataset.num = this.num;
         input.addEventListener('keyup', () => {
             this.keyup(input, false, inputfirst, inputdouble, id, inputX);
@@ -43,7 +43,7 @@ class UIComponent extends Component {
         //Добавить кнопку для удаления
         let button = document.createElement('button');
         button.innerHTML = 'Удалить';
-        button.setAttribute('class', 'secondelem2');
+        button.setAttribute('class', 'class = "butfig butfig-three"');
         button.addEventListener('click', () => {
             this.callbacks.delFunction(input.dataset.num);
             this.callbacks.delFunction(inputfirst.dataset.pointone);
@@ -93,7 +93,7 @@ class UIComponent extends Component {
         });
 
         let buttonintegral = document.createElement('button');
-        buttonintegral.setAttribute('class', 'buttonintegral');
+        buttonintegral.setAttribute('class', 'class = "butfig butfig-three"');
         buttonintegral.innerHTML = 'Найти S';
         buttonintegral.addEventListener('click', () => {
             this.keyup(input, true, inputfirst, inputdouble, id,  inputX)

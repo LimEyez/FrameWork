@@ -18,8 +18,8 @@ class Graph2DComponent extends Component {
       },
       WIN: this.WIN,
       id: 'canvas',
-      width: 750, //например 600
-      height: 750 //например 600
+      width: 600, //например 600
+      height: 600 //например 600
     });
 
     this.ui = new UIComponent({

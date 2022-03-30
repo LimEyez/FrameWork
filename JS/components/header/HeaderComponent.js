@@ -1,6 +1,6 @@
 class HeaderComponent extends Component {
     _addEventListeners() {
-        const buttons = document.querySelectorAll('.showPage');
+        const buttons = document.querySelectorAll('.btn');
         //console.log(buttons);
         buttons.forEach(button => {
             button.addEventListener(

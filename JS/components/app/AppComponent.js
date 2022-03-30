@@ -23,14 +23,14 @@ class AppComponent extends Component{
 			id: 'graph2D',
 			parent: this.id,
 			template: template.graph2DTemplate,
-			className: 'graphic2D'
+			className: 'hide'
 		});
 		
 		this.graph3D = new Graph3DComponent({
 			id: 'graph3D',
 			parent: this.id,
 			template: template.graph3DTemplate,
-			className: 'hide',
+			className: 'graphic3D',
 		});
 		
 	}

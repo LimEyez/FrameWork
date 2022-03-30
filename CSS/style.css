@@ -1,14 +1,87 @@
-#canvas {
-    text-align: start;
-    border-style: solid;
-    border-width: 5px;
-    border-color: rgb(0, 0, 0);
-    border-radius: 1.5vw;
-    overflow-y: scroll;
-    position: absolute;
-    display: block;
-    margin: 0;
+/*@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200&display=swap');*/
+
+body {
+
+    background: linear-gradient(to bottom, #202020, #111119);
+    min-width: 1393px;
+    min-height: 540;
+    top: 0;
+    left: 0;
+    background-size: 400% 400%;
+    }
+
+
+
+
+.box-3 {
+    background-color: #ca00b900;
+    margin-bottom: 20px;
 }
+
+.btn {
+    line-height: 50px;
+    height: 50px;
+    text-align: center;
+    background-color: #00000000;
+    position: relative;
+    border-style: none;
+    width: 30%;
+    cursor: pointer;
+    margin: 3px 3px;
+
+}
+
+.btn-three {
+    color: #FFF;
+    transition: all 0.5s;
+    position: relative;
+}
+
+.btn-three::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background-color: rgba(255, 255, 255, 0.1);
+    transition: all 0.3s;
+}
+
+.btn-three:hover::before {
+    opacity: 0;
+    color: rgba(109, 2, 136, 0.63);
+    transform: scale(0.5, 0.5);
+}
+
+.btn-three::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    opacity: 0;
+    transition: all 0.3s;
+    border: 1px solid rgba(109, 2, 136, 0.63);
+
+    transform: scale(1.2, 1.2);
+}
+
+.btn-three:hover::after {
+    opacity: 1;
+    transform: scale(1, 1);
+}
+
+
+
+#canvas {
+    border: 2px solid #fcfcfc;
+    border-radius: 0.3vw
+}
+
 
 .inputstyle {
     width: 300px;
@@ -46,41 +119,52 @@ button.operand2 {
     margin-top: 2vw;
 }
 
-#Color,
+
 #color3D {
-    border-width: 5px;
+    border-width: 1px;
     background-color: rgba(83, 215, 255, 0);
     border-style: solid;
-    border-color: rgb(0, 0, 0);
+    border-color: rgb(255, 255, 255);
     width: 100px;
     height: 100px;
-    border-radius: 25%;
+    border-radius: 0.2vw;
+    display: inline-block;
+}
+
+#Color {
+    border-width: 1px;
+    background-color: rgba(83, 215, 255, 0);
+    border-style: solid;
+    border-color: rgb(255, 255, 255);
+    width: 50px;
+    height: 50px;
+    border-radius: 0.2vw;
     display: inline-block;
 }
 
 #Color::-webkit-color-swatch,
 #color3D::-webkit-color-swatch {
     border: none;
-    border-radius: 25%;
+    border-radius: 0.2vw;
     padding: 0;
 }
 
 #input0 {
-    width: 70px;
-    height: 70px;
+    width: 50px;
+    height: 50px;
     text-align: center;
     font-weight: bold;
     border-style: ridge;
     font-size: 28px;
-    border-radius: 0.5vw;
+    border-radius: 0.2vw;
 }
 
 #input1 {
-    width: 70px;
-    height: 70px;
+    width: 50px;
+    height: 50px;
     font-size: 28px;
     font-weight: bold;
-    border-radius: 0.5vw;
+    border-radius: 0.2vw;
     border-style: ridge;
     text-align: center;
 }
@@ -89,8 +173,8 @@ button.operand2 {
     width: 220px;
     font-size: 28px;
     font-weight: bold;
-    height: 70px;
-    border-radius: 0.5vw;
+    height: 50px;
+    border-radius: 0.2vw;
     border-style: ridge;
     text-align: center;
 }
@@ -105,126 +189,48 @@ button.operand2 {
 
 .overlay {
     background-color: #666;
-    height: 250px;
-    width: 680px;
-    opacity: 0.9;
-    border-radius: 1vw;
-    position: relative;
+    height: 600;
+    width: 100%;
+    margin: 0px;
+    top: 0;
+    opacity: 1;
+    border-radius: 0.2vw;
+    position: absolute;
 }
 
 #showHide,
 #showHide3D {
-    width: 300px;
-    height: 40px;
-    text-decoration: none;
-    font-weight: bolder;
-    text-align: center;
-    display: inline-block;
-    margin: 10px 20px;
-    border-style: none;
-    border-radius: 0.5vw;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    background-image: linear-gradient(to right, #389cdf 0%, #4bc6f7 51%, #3cb9df 100%);
-    background-size: 200% auto;
-    transition: .5s;
-    box-shadow: 0 6px rgba(0, 0, 0, 0.02), 0 3px 15px rgba(0, 0, 0, .4), inset 0 1px rgba(255, 255, 255, .3), inset 0 0 3px rgba(255, 255, 255, .5);
-    transition: .2s;
+    margin-top: 0px;
 }
 
-#showHide:active,
-#showHide3D:active {
-    box-shadow: 0 2px rgba(0, 0, 0, 0.2), 0 1px 6px rgba(0, 0, 0, .4), inset 0 1px rgba(255, 255, 255, .3), inset 0 0 3px rgba(255, 255, 255, .5);
-    -webkit-transform: translate(0, 4px);
-    transform: translate(0, 4px);
-}
 
-#resaultf {
-    width: 150px;
-    height: 50px;
-    text-decoration: none;
-    font-weight: bolder;
-    text-align: center;
-    display: inline-block;
-    margin: 0px 10px;
-    border-style: none;
-    border-radius: 0.5vw;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    background-image: linear-gradient(to right, #c7ff5f 0%, #30d3f0 51%, #9eefc2 100%);
-    background-size: 200% auto;
-    transition: .5s;
-    box-shadow: 0 6px rgba(0, 0, 0, 0.02), 0 3px 15px rgba(0, 0, 0, .4), inset 0 1px rgba(255, 255, 255, .3), inset 0 0 3px rgba(255, 255, 255, .5);
-    transition: .2s;
-}
 
-#resaultf:active {
-    box-shadow: 0 2px rgba(0, 0, 0, 0.2), 0 1px 6px rgba(0, 0, 0, .4), inset 0 1px rgba(255, 255, 255, .3), inset 0 0 3px rgba(255, 255, 255, .5);
-    -webkit-transform: translate(0, 4px);
-    transform: translate(0, 4px);
-}
-
-#resaultf2 {
-    width: 150px;
-    height: 50px;
-    text-decoration: none;
-    font-weight: bolder;
-    font-size: smaller;
-    text-align: center;
-    display: inline-block;
-    margin: 0px 10px;
-    border-style: none;
-    border-radius: 0.5vw;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    background-image: linear-gradient(to right, #ffda5f 0%, #ba30f0 51%, #efcf9e 100%);
-    background-size: 200% auto;
-    transition: .5s;
-    box-shadow: 0 6px rgba(0, 0, 0, 0.02), 0 3px 15px rgba(0, 0, 0, .4), inset 0 1px rgba(255, 255, 255, .3), inset 0 0 3px rgba(255, 255, 255, .5);
-    transition: .2s;
-}
-
-#resaultf2:active {
-    box-shadow: 0 2px rgba(0, 0, 0, 0.2), 0 1px 6px rgba(0, 0, 0, .4), inset 0 1px rgba(255, 255, 255, .3), inset 0 0 3px rgba(255, 255, 255, .5);
-    -webkit-transform: translate(0, 4px);
-    transform: translate(0, 4px);
-}
-
-#ui,
-#ui3D {
-    width: 550px;
+#ui {
+    width: 600px;
     text-align: center;
     display: block;
     position: relative;
     float: left;
-    margin: 0px 30px;
+    margin: 0px 0px;
+}
+
+
+#ui3D {
+    width: 600px;
+    text-align: center;
+    display: block;
+    position: relative;
+    float: left;
+    margin: 0px 0px;
 }
 
 .graphic2D,
 .graphic3D {
     text-align: center;
     display: inline-block;
+    height: auto;
 }
 
-body {
-    background: linear-gradient(-45deg, #ee7752, #b32bb8, #23d573, #237fd5);
-    background-size: 400% 400%;
-    animation: gradient 20s ease infinite;
-    height: 100vh;
-    animation: gradient 10s ease infinite;
-}
-
-@keyframes gradient {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
-}
 
 #app {
     text-align: center;
@@ -276,26 +282,16 @@ body {
 }
 
 .texts {
-    font-weight: bold;
-    text-transform: inherit;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+    color: rgb(255, 255, 255);
+    font-family: 'Source Sans Pro', sans-serif;
 }
 
 #addFunction {
-    -webkit-animation: pulses 3s infinite ease-in-out;
-    -o-animation: pulses 3s infinite ease-in-out;
-    -ms-animation: pulses 3s infinite ease-in-out;
-    -moz-animation: pulses 3s infinite ease-in-out;
-    animation: pulses 3s infinite ease-in-out;
-    border-style: inset;
-    border-color: rgb(255, 255, 255);
-    width: 150px;
-    height: 25px;
+    text-align: center;
+    position: relative;
+    width: 99%;
+    height: 50px;
     opacity: 1;
-    border-radius: 0.25vw;
-    color: rgb(255, 255, 255);
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    background-color: rgb(0, 0, 0);
 }
 
 @-webkit-keyframes pulses {
@@ -303,10 +299,12 @@ body {
         -webkit-transform: scale(0.9);
         opacity: 0.7;
     }
+
     50% {
         -webkit-transform: scale(1);
         opacity: 1;
     }
+
     100% {
         -webkit-transform: scale(0.9);
         opacity: 0.7;
@@ -318,10 +316,12 @@ body {
         transform: scale(0.9);
         opacity: 0.7;
     }
+
     50% {
         transform: scale(1);
         opacity: 1;
     }
+
     100% {
         transform: scale(0.9);
         opacity: 0.7;
@@ -336,7 +336,7 @@ body {
 
 .inputintegral2 {
     vertical-align: top;
-    border-radius: 0.5vw;
+    border-radius: 0.2vw;
     width: 60px;
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
@@ -345,7 +345,7 @@ body {
 
 .inputintegral1 {
     vertical-align: top;
-    border-radius: 0.5vw;
+    border-radius: 0.2vw;
     width: 60px;
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;

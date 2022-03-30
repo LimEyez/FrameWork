@@ -20,6 +20,14 @@ class Canvas {
         return this.canvas.height - this.canvas.height * (y - this.WIN.BOTTOM) / this.WIN.HEIGHT
     }
 
+    xsPolygon(x) {
+        return this.canvas.width/2 - x / this.WIN.WIDTH * this.canvas.width
+    }
+
+    ysPolygon(y) {
+        return this.canvas.height/2 - y / this.WIN.HEIGHT * this.canvas.height
+    }
+
     sx(x) {
         return x * this.WIN.WIDTH / this.canvas.width;
     }
@@ -34,7 +42,7 @@ class Canvas {
         this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
-    line(x1, y1, x2, y2, color = "black", width, isDash) {
+    line(x1, y1, x2, y2, color = "black", width = 0.6, isDash) {
         this.context.beginPath();
         this.context.strokeStyle = color;
         if (isDash) {
@@ -101,11 +109,25 @@ class Canvas {
         this.context.closePath();
     }
 
+    polygon3D(points, color = '#FF800055') { // псоледние 55 - прозрачности
+        this.context.fillStyle = color;
+        this.context.beginPath();
+        this.context.moveTo(this.xsPolygon(points[0].x), this.ysPolygon(points[0].y));
+        for (let i = 1; i < points.length; i++) {
+            // console.log(this.xsPolygon(points[i].x), this.ysPolygon(points[i].y))
+            this.context.lineTo(this.xsPolygon(points[i].x), this.ysPolygon(points[i].y));
+        }
+        this.context.lineTo(this.xsPolygon(points[0].x), this.ysPolygon(points[0].y));
+        this.context.closePath();
+        this.context.fill();
+    }
+
     polygon(points, color = '#FF800055') { // псоледние 55 - прозрачности
         this.context.fillStyle = color;
         this.context.beginPath();
         this.context.moveTo(this.xs(points[0].x), this.ys(points[0].y));
         for (let i = 1; i < points.length; i++) {
+            // console.log(this.xsPolygon(points[i].x), this.ysPolygon(points[i].y))
             this.context.lineTo(this.xs(points[i].x), this.ys(points[i].y));
         }
         this.context.lineTo(this.xs(points[0].x), this.ys(points[0].y));

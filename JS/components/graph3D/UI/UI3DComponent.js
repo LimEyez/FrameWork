@@ -5,7 +5,6 @@ class UI3DComponent extends Component {
     }
 
     _addEventListeners() {
-        document.getElementById('showHide3D').addEventListener('click', this.showHide);
         
         document.getElementById('sphere').addEventListener('click', () => {
             this.callbacks.CreateFigure("Sphere", this.color.value);
@@ -42,6 +41,9 @@ class UI3DComponent extends Component {
         });
         document.getElementById('hyperbolicParaboloid').addEventListener('click', () => {
             this.callbacks.CreateFigure("HyperbolicParaboloid", this.color.value);
+        });
+        document.getElementById('solarSystem').addEventListener('click', () => {
+            this.callbacks.createSolarSystem();
         });
     };
 

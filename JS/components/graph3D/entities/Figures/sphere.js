@@ -1,4 +1,4 @@
-figure.prototype.Sphere = (animations, color, R = 10, count = 20, ) => {
+figure.prototype.Sphere = (animations, color, childFigures = [], center = new Point(), R = 10, count = 20, ) => {
     const points = [];
     const edges = [];
     const polygons = [];
@@ -51,6 +51,6 @@ figure.prototype.Sphere = (animations, color, R = 10, count = 20, ) => {
     }
 
 
-    return new Subject(points, edges, polygons, animations)
+    return new Subject(points, edges, polygons, animations, childFigures)
 
 }

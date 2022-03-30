@@ -1,12 +1,6 @@
 class Calculator extends RealCalculator {
 
-    // toValue(str) {
-    //     if (str.includes("*x^")) {return this.toPolinom(str)}
-    //     else if (str.includes("\n")) {return this.toMatrix(str)}
-    //     else if (str.includes("(")) {return this.toVector(str)} 
-    //     else if (str.includes("i*")){ return this.toComplex(str)} 
-    //     else {return str - 0}
-    // }
+
 
     toValue(str) {
         if(str.includes('*x^')) { return this.toPolynomial(str);}
@@ -14,24 +8,9 @@ class Calculator extends RealCalculator {
         if(str.includes('(')) { return this.toVector(str);}
         if(str.includes('i')) { return this.toComplex(str);}
         return str - 0;
-        // return this.toMatrix(str) ||
-        //     this.toVector(str) ||
-        //     this.toComplex(str) || str - 0;
     }
 
-    // toPolinom(str) {
-    //     if (str =="string" && str) {
-    //         const arr = str.replace('-', " -").replace("+", " ").split(" ");
-    //         return new Polynomial(arr.map(str => this.toMember(str)));
 
-    //     }
-    // }
-
-
-    // toPolynomial(str) {
-    //     const arrStr = str.replace('-', ' -').replace('+', ' ').split(' ');
-    //     return new Polynomial(arrStr.map(str => this.toMember(str)));
-    // }
 
     toPolynomial(str) {
         if(str instanceof Array) {

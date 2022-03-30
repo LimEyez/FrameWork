@@ -1,7 +1,7 @@
 .inputnumbers {
     text-align: center;
-    border-radius: 0.5vw;
-    width: 30vw;
+    border-radius: 0.2vw;
+    width: 30%;
     height: 15vw;
     font-size: 22px;
 }
@@ -9,6 +9,8 @@
 .calcdivinputs {
     display: flexbox;
     text-align: center;
+    font-family: 'Source Sans Pro', sans-serif;
+    color:rgb(255, 255, 255);
 }
 
 #calculator {
@@ -78,15 +80,15 @@
 }
 
 #opo {
-    width: 750px;
-    height: 850px;
+    width: auto;
+    height: auto;
     float: left;
     text-align: center;
 }
 
 #opo2 {
-    width: 750px;
-    height: 850px;
+    width: auto;
+    height: auto;
     float: left;
     text-align: center;
 }
