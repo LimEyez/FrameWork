@@ -356,14 +356,6 @@ button.operand2 {
     width: 100px;
 }
 
-.resaultS {
-    width: 50px;
-    display: inline;
-    border-radius: 0.5vw;
-    border-style: none;
-    background-color: rgba(240, 230, 140, 0);
-    vertical-align: top;
-}
 
 .secondelem {
     vertical-align: top;

@@ -28,6 +28,7 @@ class UIComponent extends Component {
         
         const inputX = document.createElement('input');
         inputX.setAttribute('placeholder', `Значение f(X)`);
+        // inputX.setAttribute('style', `width: 80px`);
         inputX.setAttribute('class', 'class = "butfig butfig-three"');
         inputX.addEventListener('keyup', () => this.keyup(input, false, inputfirst, inputdouble, id, inputX));
         //Добавить ввод для функции
@@ -103,7 +104,8 @@ class UIComponent extends Component {
         resaultS.setAttribute('readonly', 'readonly');
         resaultS.setAttribute('id', `resaultS${this.num}`);
         let id = resaultS.id;
-        resaultS.setAttribute('class', 'resaultS');
+        resaultS.setAttribute('style', `width: 100%; height: 100%`);
+        resaultS.setAttribute('class', 'butfig butfig-three');
 
         //Добавить элементы на страницу
         const funcInputs = document.getElementById('funcs');
