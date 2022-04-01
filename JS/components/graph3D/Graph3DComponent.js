@@ -243,6 +243,8 @@ class Graph3DComponent extends Component {
             })
         }
 
+        // console.log(this.figures)
+
         this.figures.forEach(figure => {
             if (this.edgeT) {
                 figure.edges.forEach(edge => {
@@ -258,9 +260,8 @@ class Graph3DComponent extends Component {
             }
             if (this.pointT) {
                 figure.points.forEach(point => {
-                    let x = this.graph3D.xs(point);
-                    let y = this.graph3D.ys(point);
-                    this.canvas3D.printpoint(x, y)
+                    let a = this.getProection(point);
+                    this.canvas3D.printpoint(a.x, a.y)
                 });
             }
         });
@@ -317,6 +318,7 @@ class Graph3DComponent extends Component {
     wheel(event) {
         event.preventDefault();
         const delta = (event.wheelDelta > 0) ? 10 : -10;
+        console.log(this.planets.solarSystem);
         // this.calcPlaneEqution();
         // const matrix = this.graph3D.zoom(delta);
         // this.graph3D.transformation(matrix, this.WIN.DISPLAY);

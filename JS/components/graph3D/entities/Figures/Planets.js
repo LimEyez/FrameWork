@@ -45,7 +45,7 @@ class Planets  {
             [
                 { // вращение вокруг солнца
                     method: 'rotateOz',
-                    value: -Math.PI / 180 / 1,
+                    value: -Math.PI / 180 / 1.6,
                     center: this.Sun.center,
                     check: true
                 }, 
