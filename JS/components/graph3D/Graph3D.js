@@ -1,7 +1,6 @@
 class Graph3D {
     constructor({ WIN }) {
         this.WIN = WIN;
-        this.WIN = WIN;
         this.plane = {
             a: 0,
             b: 0,
@@ -47,9 +46,9 @@ class Graph3D {
         const p = point.z - zs;
         const t = (a*(x0 - xs) + b*(y0 - ys)+ c*(z0 - zs)) / (a*m + b*n + c*p);
         const ps = {
-            x: x0 + m*t,
-            y: y0 + n*t,
-            z: z0 + p*t,
+            x: -x0 + m*t,
+            y: -y0 + n*t,
+            z: -z0 + p*t,
         }
         return {
             x: ps.x - a,
@@ -127,11 +126,11 @@ class Graph3D {
 
     rotateOz(alpha) {
         return [
-            [cos(alpha), 0, -sin(alpha), 0],
-            [0, 1, 0, 0],
-            [sin(alpha), 0, cos(alpha), 0],
+            [Math.cos(alpha), Math.sin(alpha), 0, 0],
+            [-(Math.sin(alpha)), Math.cos(alpha), 0, 0],
+            [0, 0, 1, 0],
             [0, 0, 0, 1]
-        ]
+        ];
     }
 
     transformation(matrix, point) {

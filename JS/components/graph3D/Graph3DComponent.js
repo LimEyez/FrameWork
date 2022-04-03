@@ -6,11 +6,11 @@ class Graph3DComponent extends Component {
             BOTTOM: -10,
             WIDTH: 20,
             HEIGHT: 20,
-            P1: new Point(-10, 10, -30), //левый верхний угол
-            P2: new Point(-10, -10, -30), //левый нимжний угол
-            P3: new Point(10, -10, -30), //правый нимжний угол
-            CAMERA: new Point(0, 0, -70),
-            DISPLAY: new Point(0, 0, -50)
+            P1: new Point(-10, 10, -1100), //левый верхний угол
+            P2: new Point(-10, -10, -1100), //левый нимжний угол
+            P3: new Point(10, -10, -1100), //правый нимжний угол
+            CAMERA: new Point(0, 0, -1130),
+            DISPLAY: new Point(0, 0, -1100)
         };
         this.canMove = false;
         this.graph3D = new Graph3D({
@@ -35,7 +35,7 @@ class Graph3DComponent extends Component {
         this.edgeT = 0;
         this.polyT = 1;
         //===============
-        this.canvas3D = new Canvas({
+        this.canvas = new Canvas({
             callbacks: {
                 wheel: event => this.wheel(event),
                 mouseup: event => this.mouseup(event),
@@ -45,8 +45,7 @@ class Graph3DComponent extends Component {
             WIN: this.WIN,
             id: 'Canvas3D',
             width: 600,
-            height: 600,
-            graph3D: this.graph3D,
+            height: 600
         });
 
         this.ui = new UI3DComponent({
@@ -85,10 +84,7 @@ class Graph3DComponent extends Component {
         let lastTimestamp = Date.now();
 
         const animLoop = () => {
-            this.calcPlaneEqution(); // получить и записать плоскость экрана
-            this.calcWindowVectors(); // вычислить вектора экрана
             // calc fps 
-            
             FPS++;
             const timestamp = Date.now();
             if (timestamp - lastTimestamp >= 1000) {
@@ -100,6 +96,9 @@ class Graph3DComponent extends Component {
             if (this.animation) {
                 this.goAnimation(this.animations);
             }
+            // print scene
+            this.calcPlaneEqution(); // получить и записать плоскость экрана
+            this.calcWindowVectors(); // вычислить вектора экрана
             this.render();
             requestAnimFrame(animLoop);
         }
@@ -132,60 +131,37 @@ class Graph3DComponent extends Component {
     }
 
     getProection(point) {
-        const M = this.graph3D.getProection(point) ;
+        const M = this.graph3D.getProection(point);
         const P2M = this.graph3D.calcVector(this.WIN.P2, M);
         const cosa = this.graph3D.calcCorner(this.P2P3, M);
         const cosb = this.graph3D.calcCorner(this.P1P2, M);
-        const module = this.graph3D.calcVectorModule(P2M)
+        const module = this.graph3D.calcVectorModule(P2M);
+        // console.log(cosa)
         return {
             x: cosa * module,
             y: cosb * module
-        };  
+        };
     }
 
     transformator(matrix) {
+        // console.log(matrix);
         this.graph3D.transformation(matrix, this.WIN.CAMERA);
         this.graph3D.transformation(matrix, this.WIN.DISPLAY);
         this.graph3D.transformation(matrix, this.WIN.P1);
         this.graph3D.transformation(matrix, this.WIN.P2);
         this.graph3D.transformation(matrix, this.WIN.P3)
     }
-    
-
-    goAnimation(animations, parentMatrix) {
-        // console.log(animations)
-        animations.forEach(anim => {
-            const matrix = this.figureAnimate(anim.root, parentMatrix)
-            if (anim.nodes) {
-                this.goAnimation(anim.nodes, matrix);
-            }
-            // console.log(anim)
-        })
-    }
 
     figureAnimate(figure, parentMatrix = this.graph3D.one()) {
         const matrix = figure.animations.reduce(
             (S, animation) => {
                 const { method, value } = animation;
-                // console.log(animation.check)
-                var resMatrix = this.graph3D.one();
                 const center = animation.center || figure.center;
                 const { x, y, z } = center;
-                if (animation.check) {
-                    resMatrix = this.graph3D.animateMatrix(-x, -y, -z, method, value);
-                    // console.log(1)
-                }
-                else {
-                    let temporaryMatrix = this.graph3D.animateMatrix(-x, -y, -z, method, value);
-                    figure.points.forEach(point =>
-                        this.graph3D.transformation(temporaryMatrix, point)
-                    );
-                    // console.log(2)
-                }
-                if (animation.center) {
-                    this.graph3D.transformation(resMatrix, figure.center);
-                    // console.log(3)
-                }
+                let resMatrix = this.graph3D.one();
+                // if (!animation.check) {
+                resMatrix = this.graph3D.animateMatrix(-x, -y, -z, method, value);
+                // }
                 return this.graph3D.multMatrixes(S, resMatrix);
             },
             parentMatrix
@@ -193,23 +169,48 @@ class Graph3DComponent extends Component {
         figure.points.forEach(point =>
             this.graph3D.transformation(matrix, point)
         );
+        this.graph3D.transformation(matrix, figure.center);
+        return figure.animations.reduce(
+            (S, animation) => {
+                const { method, value } = animation;
+                const center = animation.center || figure.center;
+                const { x, y, z } = center;
+                let resMatrix = this.graph3D.one();
+                if (animation.check) {
+                    return S;
+                }
+                resMatrix = this.graph3D.animateMatrix(-x, -y, -z, method, value);
+                return this.graph3D.multMatrixes(S, resMatrix);
+            },
+            parentMatrix
+        );;
 
-        return matrix
+    }
+
+    goAnimation(animations, parentMatrix) {
+        if (this.animation) {
+            animations.forEach(anim => {
+                const matrix = this.figureAnimate(anim.root, parentMatrix)
+                if (anim.nodes) {
+                    this.goAnimation(anim.nodes, matrix);
+                }
+            });
+        }
     }
 
 
-//================================================== Вывод фигур =====================================================
+    //================================================== Вывод фигур =====================================================
 
     render() {
-        this.canvas3D.clear();
+        this.canvas.clear();
         if (this.polyT) {
             this.allPolygons = [];
             this.figures.forEach((figure, index) => {
-                this
                 this.graph3D.calcDistance(figure, this.WIN.CAMERA, 'distance');
                 this.graph3D.calcDistance(figure, this.LIGHT, 'lumen');
                 figure.polygons.forEach(polygon => {
                     polygon.figureIndex = index;
+                    // console.log(polygon)
                     this.allPolygons.push(polygon);
                 });
             });
@@ -218,6 +219,7 @@ class Graph3DComponent extends Component {
                 const figure = this.figures[polygon.figureIndex];
                 polygon.normal = this.graph3D.multVector(polygon.points, figure);
                 const points = polygon.points.map(point => {
+                    // console.log(point);
                     return this.getProection(figure.points[point]);
                     // {
                     // x: this.graph3D.xs(figure.points[point]),
@@ -232,7 +234,7 @@ class Graph3DComponent extends Component {
 
                 //Отсечение невидимых полигонов
                 if (this.graph3D.sortByVector(polygon.normal, this.WIN.CAMERA, polygon.check)) {
-                    this.canvas3D.polygon(points, polygon.rgbToHex(r, g, b));
+                    this.canvas.polygon3D(points, polygon.rgbToHex(r, g, b));
                 }
 
                 //Точки по координатам нормальных векторов
@@ -242,15 +244,12 @@ class Graph3DComponent extends Component {
                 // this.canvas3D.printpoint(x, y)
             })
         }
-
-        // console.log(this.figures)
-
         this.figures.forEach(figure => {
             if (this.edgeT) {
                 figure.edges.forEach(edge => {
                     const point1 = this.getProection(figure.points[edge.p1]);
                     const point2 = this.getProection(figure.points[edge.p2]);
-                    this.canvas3D.line(
+                    this.canvas.line(
                         point1.x,
                         point1.y,
                         point2.x,
@@ -261,15 +260,16 @@ class Graph3DComponent extends Component {
             if (this.pointT) {
                 figure.points.forEach(point => {
                     let a = this.getProection(point);
-                    this.canvas3D.printpoint(a.x, a.y)
+                    this.canvas.printpoint(a.x, a.y)
                 });
             }
         });
-        this.canvas3D.text(`FPS = ${this.FPS}`, -9, 9, 18);
+
+        this.canvas.text(`FPS = ${this.FPS}`, -9, 9, 18);
     }
 
 
-//====================================== ЧЕК-БОКСЫ =============================================
+    //====================================== ЧЕК-БОКСЫ =============================================
     checklight() {
         if (this.moveLight) {
             this.switchLight.style.backgroundColor = '#5ef7d4';
@@ -300,8 +300,8 @@ class Graph3DComponent extends Component {
     polyCheck(poly) {
         poly == 0 ? this.polyT = 1 : this.polyT = 0;
     }
-    
-//===================================================== Действия пользователя =============================================
+
+    //===================================================== Действия пользователя =============================================
 
     mouseup(event) {
         this.canMove = false;
@@ -317,22 +317,20 @@ class Graph3DComponent extends Component {
 
     wheel(event) {
         event.preventDefault();
-        const delta = (event.wheelDelta > 0) ? 10 : -10;
-        console.log(this.planets.solarSystem);
-        // this.calcPlaneEqution();
-        // const matrix = this.graph3D.zoom(delta);
-        // this.graph3D.transformation(matrix, this.WIN.DISPLAY);
-        // this.graph3D.transformation(matrix, this.WIN.CAMERA);
-        // console.log(this.WIN.DISPLAY)
-        this.WIN.CAMERA.z += delta;
-        this.WIN.DISPLAY.z += delta;
-
+        const delta = (event.wheelDelta > 0) ? -0.02 : 0.02;
+        // console.log(this.WIN.CAMERA);
+        this.transformator(this.graph3D.move(
+            this.WIN.CAMERA.x * delta,
+            this.WIN.CAMERA.y * delta,
+            this.WIN.CAMERA.z * delta)
+        )
+        // console.log(this.CAMERA)
     }
 
     mousemove(event) {
         if (this.canMove) {
             const gradus = Math.PI / 180 / 4;
-            
+
             {
                 const matrix = this.graph3D.rotateOy((this.dy - event.offsetY) * gradus);
                 this.calcPlaneEqution();
@@ -349,33 +347,26 @@ class Graph3DComponent extends Component {
     }
 
     keyDownHandler(event) {
-        let matrix;
-            switch (event.keyCode) {
-                case 87: //w
-                    matrix = this.graph3D.move(0, 1, 0); 
-                    this.transformator(matrix);
-                break;
-                case 65: //a
-                    matrix = this.graph3D.move(-1, 0, 0);
-                    this.transformator(matrix);  
-                break;
-                case 83: //s
-                    matrix = this.graph3D.move(0, -1, 0); 
-                    this.transformator(matrix); 
-                break;
-                case 68: //d
-                    matrix = this.graph3D.move(1, 0, 0); 
-                    this.transformator(matrix); 
-                break;
-            }
-            
-            //console.log(this.WIN.CAMERA)
+        switch (event.keyCode) {
+            case 65: // key a
+                return this.transformator(this.graph3D.rotateOx(Math.PI / 180));
+            case 68: // key d
+                return this.transformator(this.graph3D.rotateOx(-Math.PI / 180));
+            case 83: // key s
+                return this.transformator(this.graph3D.rotateOy(Math.PI / 180));
+            case 87: // key w
+                return this.transformator(this.graph3D.rotateOy(-Math.PI / 180));
+            case 81: // key q
+                return this.transformator(this.graph3D.rotateOz(Math.PI / 180));
+            case 69: // key e
+                return this.transformator(this.graph3D.rotateOz(-Math.PI / 180));
+        }
     }
 
-    
-//===================================================== ВЫЧИСЛЕНИЯ =============================================
 
-    calcWindowVectors(){
+    //===================================================== ВЫЧИСЛЕНИЯ =============================================
+
+    calcWindowVectors() {
         this.P1P2 = this.graph3D.calcVector(this.WIN.P2, this.WIN.P1);
         this.P2P3 = this.graph3D.calcVector(this.WIN.P2, this.WIN.P3)
     }

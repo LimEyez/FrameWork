@@ -12,20 +12,20 @@ class Canvas {
         this.canvas.addEventListener('mouseleave', callbacks.mouseleave);
     }
 
-    xs(x) {
-        return this.canvas.width * (x - this.WIN.LEFT) / this.WIN.WIDTH
+    xs (x) {
+        return this.canvas.width * (x - this.WIN.LEFT) / this.WIN.WIDTH;
     }
 
-    ys(y) {
-        return this.canvas.height - this.canvas.height * (y - this.WIN.BOTTOM) / this.WIN.HEIGHT
+    ys (y) {
+        return this.canvas.height - (this.canvas.height * (y - this.WIN.BOTTOM) / this.WIN.HEIGHT);
     }
 
-    xsPolygon(x) {
-        return this.canvas.width/2 - x / this.WIN.WIDTH * this.canvas.width
+    xsPolygon (x) {
+        return this.canvas.width * x / this.WIN.WIDTH + this.canvas.width / 2;
     }
 
-    ysPolygon(y) {
-        return this.canvas.height/2 - y / this.WIN.HEIGHT * this.canvas.height
+    ysPolygon (y) {
+        return this.canvas.height - (this.canvas.height * y / this.WIN.HEIGHT) - this.canvas.height / 2;
     }
 
     sx(x) {
@@ -36,8 +36,8 @@ class Canvas {
         return y * this.WIN.HEIGHT / this.canvas.height;
     }
 
-    clear() {
-        this.context.fillStyle = "white";
+    clear(color) {
+        this.context.fillStyle = color || "white";
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
@@ -113,13 +113,13 @@ class Canvas {
         this.context.fillStyle = color;
         this.context.beginPath();
         this.context.moveTo(this.xsPolygon(points[0].x), this.ysPolygon(points[0].y));
-        for (let i = 1; i < points.length; i++) {
-            // console.log(this.xsPolygon(points[i].x), this.ysPolygon(points[i].y))
+        for(let i = 1; i < points.length; i++) {
             this.context.lineTo(this.xsPolygon(points[i].x), this.ysPolygon(points[i].y));
         }
         this.context.lineTo(this.xsPolygon(points[0].x), this.ysPolygon(points[0].y));
         this.context.closePath();
         this.context.fill();
+        //this.context.drawImage(this.virtualContext.canvas, 0, 0);
     }
 
     polygon(points, color = '#FF800055') { // псоледние 55 - прозрачности
@@ -127,7 +127,6 @@ class Canvas {
         this.context.beginPath();
         this.context.moveTo(this.xs(points[0].x), this.ys(points[0].y));
         for (let i = 1; i < points.length; i++) {
-            // console.log(this.xsPolygon(points[i].x), this.ysPolygon(points[i].y))
             this.context.lineTo(this.xs(points[i].x), this.ys(points[i].y));
         }
         this.context.lineTo(this.xs(points[0].x), this.ys(points[0].y));

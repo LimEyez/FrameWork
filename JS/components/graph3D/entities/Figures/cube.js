@@ -1,15 +1,19 @@
-figure.prototype.Cube = (color, animation = []) => {
-    const animations = animation;
+figure.prototype.Cube = (    
+    color = "#ff0000",
+    r = 5,
+    point = new Point(0, 0, 0),
+    animations = []
+    ) => {
 
     const points = [
-        new Point(5, 5, 5), new Point(5, -5, 5),
-        new Point(-5, 5, 5), new Point(5, 5, -5),
-        new Point(-5, 5, -5), new Point(-5, -5, 5),
-        new Point(-5, -5, -5), new Point(5, -5, -5)
+        new Point(r, r, r), new Point(r, -r, r),
+        new Point(-r, r, r), new Point(r, r, -r),
+        new Point(-r, r, -r), new Point(-r, -r, r),
+        new Point(-r, -r, -r), new Point(r, -r, -r)
     ];
     const edges = [
         //-----------------------------//
-        new Edge(4, 2), new Edge(5, 2),
+        new Edge(4, 2), new Edge(r, 2),
         new Edge(6, 5), new Edge(6, 4),
         //-----------------------------//
         new Edge(7, 3), new Edge(0, 1),

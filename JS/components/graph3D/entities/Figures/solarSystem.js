@@ -3,7 +3,8 @@ figure.prototype.solarSystem = (
     R = 15,
     point = new Point(0, 0, 0),
     color = "#ff0000",
-    animations = []) => {
+    animations = []
+    ) => {
 
     const points = [];
     const edges = [];

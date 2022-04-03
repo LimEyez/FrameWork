@@ -1,0 +1,18 @@
+#canvasGame {
+    margin-top: 40px;
+    outline: 20px solid #481d15;
+    border-radius: 1px;
+}
+
+#pushBall {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    margin: 10px 10px 10px 30px;
+}
+
+#cleanPlace {
+    position: relative;
+    width: 100px;
+    height: 100px;
+}

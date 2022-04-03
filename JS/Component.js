@@ -23,6 +23,10 @@ class Component {
 			document.getElementById(this.id).classList.remove('hide');
 			document.getElementById(this.id).classList.add('graphic3D');
 		}
+		else if (this.id == 'billiards') {
+			document.getElementById(this.id).classList.remove('hide');
+			// document.getElementById(this.id).classList.add('hide');
+		}
 		else {
 			document.getElementById(this.id).classList.remove('hide');
 		}
@@ -36,6 +40,10 @@ class Component {
 		}
 		else if (this.id == 'graph3D') {
 			document.getElementById(this.id).classList.remove('graphic3D');
+			document.getElementById(this.id).classList.add('hide');
+		}
+		else if (this.id == 'billiards') {
+			document.getElementById(this.id).classList.remove('billiards');
 			document.getElementById(this.id).classList.add('hide');
 		}
 		else {

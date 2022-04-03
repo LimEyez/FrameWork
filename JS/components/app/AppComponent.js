@@ -25,12 +25,19 @@ class AppComponent extends Component{
 			template: template.graph2DTemplate,
 			className: 'hide'
 		});
+
+		this.billiards = new BilliardsComponent({
+			id: 'billiards',
+			parent: this.id,
+			template: template.billiardsTemplate,
+			className: 'show'
+		});
 		
 		this.graph3D = new Graph3DComponent({
 			id: 'graph3D',
 			parent: this.id,
 			template: template.graph3DTemplate,
-			className: 'graphic3D',
+			className: 'hide',
 		});
 		
 	}
@@ -39,6 +46,7 @@ class AppComponent extends Component{
 		this.calculator.hide();
 		this.graph2D.hide();
 		this.graph3D.hide();
+		this.billiards.hide();
 		this[name].show();
 	}
 }

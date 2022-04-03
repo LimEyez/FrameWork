@@ -5,7 +5,7 @@ class Planets  {
                 { // вращение вокруг своей оси
                     method: 'rotateOz',
                     value: -(Math.PI / 180 / 3),
-                    // check: true
+                    check: true
                 }
             ]);
 
@@ -15,12 +15,12 @@ class Planets  {
                 { 
                     method: 'rotateOz',
                     value: -Math.PI / 180,
-                    center: new Point,
-                    check: true
+                    center: new Point
                 },
                 {// вращение вокруг своей оси
                     method: 'rotateOz',
                     value: -Math.PI / 180,
+                    check: true
                 },
             ],
         );
@@ -31,11 +31,11 @@ class Planets  {
                     method: 'rotateOz',
                     value: -Math.PI / 180 / 1.3,
                     center: new Point,
-                    check: true
                 },
                 {// вращение вокруг своей оси
                     method: 'rotateOz',
                     value: -Math.PI / 180,
+                    check: true
                 },
             ]
         );
@@ -47,12 +47,11 @@ class Planets  {
                     method: 'rotateOz',
                     value: -Math.PI / 180 / 1.6,
                     center: this.Sun.center,
-                    check: true
                 }, 
                 { // вращение вокруг своей оси
                     method: 'rotateOz',
                     value: -Math.PI / 180,
-                    // check: true
+                    check: true
                 },
         ]
         );
@@ -61,14 +60,13 @@ class Planets  {
                 { //вращение вокруг земли
                     method: 'rotateOz',
                     value: -Math.PI / 360 * 3  ,
-                    center: this.Earth.center,
+                    center: this.Earth.center
+                },
+                { // вращение вокруг своей оси
+                    method: 'rotateOz',
+                    value: Math.PI / 360,
                     check: true
                 },
-                // { // вращение вокруг своей оси
-                //     method: 'rotateOz',
-                //     value: Math.PI / 360,
-                //     // check: true
-                // },
 
             ]
         );
@@ -80,11 +78,11 @@ class Planets  {
                     method: 'rotateOz',
                     value: -Math.PI / 180 / 2,
                     center: new Point,
-                    check: true
                 }, 
                 { // вращение вокруг своей оси
                     method: 'rotateOz',
                     value: -Math.PI / 180 / 1.2,
+                    check: true
                 },
             ]
         );
@@ -96,11 +94,12 @@ class Planets  {
                     method: 'rotateOz',
                     value: -Math.PI / 180 / 2.4,
                     center: new Point,
-                    check: true
+                    
                 }, 
                 { // вращение вокруг своей оси
                     method: 'rotateOz',
                     value: -Math.PI / 180 / 1.4,
+                    check: true
                 },
             ]
         );
@@ -112,11 +111,11 @@ class Planets  {
                     method: 'rotateOz',
                     value: -Math.PI / 180 / 2.9,
                     center: new Point,
-                    check: true
                 }, 
                 { // вращение вокруг своей оси
                     method: 'rotateOz',
                     value: -Math.PI / 180 / 1.7,
+                    check: true
                 },
             ]
         );
@@ -128,13 +127,12 @@ class Planets  {
                     method: 'rotateOy',
                     value: -Math.PI / 360 / 3,
                     center: this.Saturn.center,
-                    check: true
                 },
                 {
                     method: 'rotateOx',
                     value: Math.PI / 180,
                     center: this.Saturn.center,
-                    // check: true
+                    check: true
                 }
         
             ]
@@ -147,11 +145,11 @@ class Planets  {
                     method: 'rotateOz',
                     value: -Math.PI / 180 / 3.4,
                     center: new Point,
-                    check: true
                 }, 
                 { // вращение вокруг своей оси
                     method: 'rotateOz',
                     value: -Math.PI / 180 / 2.2,
+                    check: true
                 },
             ]
         );
@@ -162,14 +160,13 @@ class Planets  {
                 {
                     method: 'rotateOy',
                     value: -Math.PI / 360 / 2.5,
-                    center: this.Uranium.center,
-                    check: true
+                    center: this.Uranium.center
                 },
                 {
                     method: 'rotateOx',
                     value: Math.PI / 180 / 1.5,
                     center: this.Uranium.center,
-                    // check: true
+                    check: true
                 }
         
             ]
@@ -181,12 +178,12 @@ class Planets  {
                 { // вращение вокруг солнца
                     method: 'rotateOz',
                     value: -Math.PI / 180 / 4,
-                    center: new Point,
-                    check: true
+                    center: new Point
                 }, 
                 { // вращение вокруг своей оси
                     method: 'rotateOz',
                     value: -Math.PI / 180 / 2.7,
+                    check: true
                 },
             ]
         );
