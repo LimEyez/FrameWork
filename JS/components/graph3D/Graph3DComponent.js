@@ -197,6 +197,24 @@ class Graph3DComponent extends Component {
             });
         }
     }
+    
+    fixPolusSphere(figure, polygon){
+        for (let i = 0; i < 3; i++){
+            for (let j = i+1; j < 4; j++) {
+                if (
+                    figure.points[polygon.points[i]].x == figure.points[polygon.points[j]].x &&
+                    figure.points[polygon.points[i]].y == figure.points[polygon.points[j]].y &&
+                    figure.points[polygon.points[i]].z == figure.points[polygon.points[j]].z 
+                ) {
+                    polygon.check = true;
+                    break
+                }
+            }
+            if (polygon.check == true) {
+                break
+            }
+        }
+    }
 
 
     //================================================== Вывод фигур =====================================================
@@ -233,6 +251,9 @@ class Graph3DComponent extends Component {
                 b = Math.round(b * lumen);
 
                 //Отсечение невидимых полигонов
+                this.fixPolusSphere(figure, polygon);
+
+
                 if (this.graph3D.sortByVector(polygon.normal, this.WIN.CAMERA, polygon.check)) {
                     this.canvas.polygon3D(points, polygon.rgbToHex(r, g, b));
                 }

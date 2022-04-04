@@ -68,7 +68,7 @@ class BilliardsComponent extends Component {
 
     //===========================================
 
-    ballMove(figure, powerX = 1, powerY = 0.2) {
+    ballMove(figure, powerX = 1, powerY = 0.6) {
         let modulX = Math.abs(powerX);
         let modulY = Math.abs(powerY);
         if (modulX > 0.01 || modulY > 0.01) {
