@@ -252,8 +252,6 @@ class Graph3DComponent extends Component {
 
                 //Отсечение невидимых полигонов
                 this.fixPolusSphere(figure, polygon);
-
-
                 if (this.graph3D.sortByVector(polygon.normal, this.WIN.CAMERA, polygon.check)) {
                     this.canvas.polygon3D(points, polygon.rgbToHex(r, g, b));
                 }

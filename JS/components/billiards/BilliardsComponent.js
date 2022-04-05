@@ -60,10 +60,21 @@ class BilliardsComponent extends Component {
         animLoop();
     }
 
-    BounceWall(radians, incRadians) {
+    /* BounceWall(radians, incRadians) {
         const result = (2 * incRadians) - radians;
         return result;
+    } */
+
+    calcGain(power, modul, gain){
+        if (power / modul == 1) {
+           power -= gain;
+        }
+        else {
+            power += gain;
+        }
+        return power
     }
+    
 
 
     //===========================================
@@ -75,40 +86,30 @@ class BilliardsComponent extends Component {
             //============= POWER Y ================
             // if (modulY > 0.01) {
                 let gain = modulY / 50;
-                if (figure.center.y > 1800) {
+                if (figure.center.y > 1800 && powerY/modulY == 1) {
                     powerY = -powerY;
                 }
-                else if (figure.center.y < -1800) {
+                else if (figure.center.y < -1800 && powerY/modulY == -1) {
                     powerY = -powerY;
                 }
-                if (powerY / modulY == 1) {
-                    powerY -= gain;
-                }
-                else {
-                    powerY += gain;
-                }
+                powerY = this.calcGain(powerY, modulY, gain)
              // }
             //=========== POWER X ==================
             // if (modulX > 0.01) 
             {
                 let gain = modulX / 50;
-                if (figure.center.x > 600) {
+                if (figure.center.x >= 600 && powerX/modulX == 1) {
                     powerX = -powerX;
                 }
-                else if (figure.center.x < -600) {
+                else if (figure.center.x < -600 && powerX/modulX == -1) {
                     powerX = -powerX;
                 }
-                if (powerX / modulX == 1) {
-                    powerX -= gain;
-                }
-                else {
-                    powerX += gain;
-                }
+                powerX = this.calcGain(powerX, modulX, gain)
             }
         // }
         //======================================
-        //if (modulX > 0.01 && modulY > 0.01) {
             this.moveSceneBall(figure, powerX, powerY, 0);
+
             setTimeout(
                 () => {
                     this.ballMove(figure, powerX, powerY)
@@ -125,6 +126,24 @@ class BilliardsComponent extends Component {
             this.graph3D.transformation(matrix, figure.center);
             // console.log(figure.center)
         });
+    }
+
+    fixPolusSphere(figure, polygon){
+        for (let i = 0; i < 3; i++){
+            for (let j = i+1; j < 4; j++) {
+                if (
+                    figure.points[polygon.points[i]].x == figure.points[polygon.points[j]].x &&
+                    figure.points[polygon.points[i]].y == figure.points[polygon.points[j]].y &&
+                    figure.points[polygon.points[i]].z == figure.points[polygon.points[j]].z 
+                ) {
+                    polygon.check = true;
+                    break
+                }
+            }
+            if (polygon.check == true) {
+                break
+            }
+        }
     }
 
     //==============================================
@@ -204,6 +223,7 @@ class BilliardsComponent extends Component {
             b = Math.round(b * lumen);
 
             //Отсечение невидимых полигонов
+            this.fixPolusSphere(figure, polygon);
             if (this.graph3D.sortByVector(polygon.normal, this.WIN.CAMERA, polygon.check)) {
                 this.canvas.polygon3D(points, polygon.rgbToHex(r, g, b));
             }
