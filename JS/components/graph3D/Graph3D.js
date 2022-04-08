@@ -172,6 +172,82 @@ class Graph3D {
         });
     }
 
+        //закрашивает полигоны в тени
+        calcShadow(polygon, figures, LIGHT) {
+            //центр полигона1
+            if (polygon.offDark) {
+                return{
+                    isShadow: false
+                }
+            }
+            const M1 = polygon.normal;
+
+            //радиус полигона1
+            const r = polygon.R;
+            // console.log(polygon)
+            //расстояние от полигона1 до точки освещения
+            const s = this.calcVector(M1, LIGHT);
+            for (let i = 0; i < figures.length; i++) {
+                for (let j = 0; j < figures[i].polygons.length; j++) {
+                    const polygon2 = figures[i].polygons[j];
+                    //центр полигона2
+                    const M0 = polygon2.normal;
+                    if (M1.x === M0.x &&
+                        M1.y === M0.y &&
+                        M1.z === M0.z) {
+                        continue;
+                    }
+                    if (polygon2.lumen > polygon.lumen) {
+                        continue;
+                    }
+                    const dark = this.calcVectorModule(this.vectorProd(this.calcVector(M0, M1), s)) /
+                        this.calcVectorModule(s);
+                    if (dark < r) {
+                        return {
+                            isShadow: true,
+                            dark: dark / 3
+                        }
+                    }
+                }
+            }
+            return {
+                isShadow: false
+            }
+        }
+
+    // //Метод вычисляющий тени
+    // calcShadow(polygon, figures, light) {
+    //     if (polygon.offDark) {
+    //         return{
+    //             isShadow: false
+    //         }
+    //     }
+    //     const M1 = polygon.normal;
+    //     const s = this.calcVector(M1, light); //вектор от точки M1 до light
+    //     for (let i = 0; i < figures.length; i++) {
+    //         for (let j = 0; j < figures[i].polygons.length; j++) {
+    //             const polygon2 = figures[i].polygons[j];
+    //             const M0 = polygon2.normal;
+    //             if ((M1.x === M0.x && M1.y === M0.y && M1.z === M0.z) || (polygon2.offDark)) {
+    //                 continue;
+    //             }
+    //             if (polygon2.lumen < polygon.lumen) { //нужно проверить, > или <
+    //                 continue;
+    //             }
+    //             const dark = this.calcVectorModule(this.vectorProd(this.calcVector(M0, M1), s)) / this.calcVectorModule(s);
+    //             if (dark > 0.1) {
+    //                 return {
+    //                     isShadow: true,
+    //                     dark: dark/10
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     return {
+    //         isShadow: false
+    //     }
+    // }
+
     //Метод, возвращения значения освещенности
     calcIllumination(distance, lumen) {
         const res = distance ? lumen / Math.pow(distance, 3) : 1;
@@ -234,6 +310,24 @@ class Graph3D {
     }
 
     multVector(points, figure) {
+        const point = figure.points
+        const normal = {
+            x: (point[points[1]].y - point[points[2]].y) * (point[points[3]].z - point[points[2]].z) - (point[points[1]].z - point[points[2]].z) * (point[points[3]].y - point[points[2]].y),
+            y: (point[points[1]].z - point[points[2]].z) * (point[points[3]].x - point[points[2]].x) - (point[points[1]].x - point[points[2]].x) * (point[points[3]].z - point[points[2]].z),
+            z: (point[points[1]].x - point[points[2]].x) * (point[points[3]].y - point[points[2]].y) - (point[points[1]].y - point[points[2]].y) * (point[points[3]].x - point[points[2]].x),
+        }
+        return normal;
+    }
+
+    vectorProd(a, b){
+        return {
+            x: a.y * b.z - a.z * b.y,
+            y: a.z * b.x - a.x * b.z,
+            z: a.x * b.y - a.y * b.z
+        }
+    }
+
+    calcCenterPolygon(points, figure) {
         const point = figure.points
         const normal = {
             x: (point[points[1]].y - point[points[2]].y) * (point[points[3]].z - point[points[2]].z) - (point[points[1]].z - point[points[2]].z) * (point[points[3]].y - point[points[2]].y),

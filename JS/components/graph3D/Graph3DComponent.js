@@ -229,13 +229,16 @@ class Graph3DComponent extends Component {
                 figure.polygons.forEach(polygon => {
                     polygon.figureIndex = index;
                     // console.log(polygon)
+                    polygon.R = figure.R;
+                    polygon.normal = this.graph3D.calcCenterPolygon(polygon.points, figure);
                     this.allPolygons.push(polygon);
                 });
             });
             this.graph3D.sortByArtistAlgoritm(this.allPolygons);
             this.allPolygons.forEach(polygon => {
+
                 const figure = this.figures[polygon.figureIndex];
-                polygon.normal = this.graph3D.multVector(polygon.points, figure);
+                polygon.normal = this.graph3D.calcCenterPolygon(polygon.points, figure);
                 const points = polygon.points.map(point => {
                     // console.log(point);
                     return this.getProection(figure.points[point]);
@@ -244,8 +247,12 @@ class Graph3DComponent extends Component {
                     // y: this.graph3D.ys(figure.points[point]) 
                     // }
                 });
-                const lumen = this.graph3D.calcIllumination(polygon.lumen, this.LIGHT.lumen);
+                let lumen = this.graph3D.calcIllumination(polygon.lumen, this.LIGHT.lumen);
                 let { r, g, b } = polygon.color
+
+                const {isShadow, dark} = this.graph3D.calcShadow(polygon, this.figures, this.LIGHT);
+                lumen = (isShadow) ? dark: this.graph3D.calcIllumination(polygon.lumen, this.LIGHT.lumen)
+                
                 r = Math.round(r * lumen);
                 g = Math.round(g * lumen);
                 b = Math.round(b * lumen);

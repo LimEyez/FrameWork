@@ -15,15 +15,15 @@ figure.prototype.ringsSaturn = (
     //точки 
     for (let i = 0; i < Math.PI * 2; i += dt) {
         const x = point.x + R * Math.sin(i);
-        const y = point.y;
-        const z = point.z + R * Math.cos(i);
+        const y = point.y + R * Math.cos(i);
+        const z = point.z;
         points.push(new Point(x, y, z));
     }
     R /= 1.5;
     for (let i = 0; i < Math.PI * 2; i += dt) {
         const x = point.x + R * Math.sin(i);
-        const y = point.y;
-        const z = point.z + R * Math.cos(i);
+        const y = point.y + R * Math.cos(i);
+        const z = point.z;
         points.push(new Point(x, y, z));
     }
 

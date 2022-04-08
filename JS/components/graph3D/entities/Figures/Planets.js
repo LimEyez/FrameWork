@@ -1,13 +1,16 @@
 class Planets  {
         //=================Элементы системы==================
-         Sun = (new figure).solarSystem(20, 15, new Point, "#ffff00",
+         Sun = (new figure).solarSystem(
+             20, 15, new Point, "#ffff00",
             [
                 { // вращение вокруг своей оси
                     method: 'rotateOz',
                     value: -(Math.PI / 180 / 3),
                     check: true
                 }
-            ]);
+            ],
+            true
+        );
 
          Mercury = (new figure).solarSystem(
             20, 2, new Point(-20, 0, 0), "#faebd7", 
@@ -129,7 +132,7 @@ class Planets  {
                     center: this.Saturn.center,
                 },
                 {
-                    method: 'rotateOx',
+                    method: 'rotateOz',
                     value: Math.PI / 180,
                     center: this.Saturn.center,
                     check: true
@@ -163,8 +166,8 @@ class Planets  {
                     center: this.Uranium.center
                 },
                 {
-                    method: 'rotateOx',
-                    value: Math.PI / 180 / 1.5,
+                    method: 'rotateOz',
+                    value: -Math.PI / 180,
                     center: this.Uranium.center,
                     check: true
                 }

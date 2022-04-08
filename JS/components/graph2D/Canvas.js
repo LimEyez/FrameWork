@@ -37,7 +37,7 @@ class Canvas {
     }
 
     clear(color) {
-        this.context.fillStyle = color || "white";
+        this.context.fillStyle = color || "#708090";
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }

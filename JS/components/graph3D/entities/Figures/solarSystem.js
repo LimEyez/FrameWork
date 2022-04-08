@@ -3,7 +3,8 @@ figure.prototype.solarSystem = (
     R = 15,
     point = new Point(0, 0, 0),
     color = "#ff0000",
-    animations = []
+    animations = [],
+    offDark = false
     ) => {
 
     const points = [];
@@ -55,7 +56,8 @@ figure.prototype.solarSystem = (
 
     polygons.forEach(poly => {
         poly.color = poly.hexToRgb(color);
+        poly.offDark = offDark;
     });
 
-    return new Subject(points, edges, polygons, animations, point);
+    return new Subject(points, edges, polygons, animations, point, R);
 }

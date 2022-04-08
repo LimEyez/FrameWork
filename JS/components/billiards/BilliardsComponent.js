@@ -24,100 +24,97 @@ class BilliardsComponent extends Component {
             width: 750,
             height: 750
         });
+
         this.LIGHT = new Light(0, 0, 50, 100000);
+
+        this.buttonPush = document.getElementById('pushBall');
+        this.checkTap = true;
 
         this.graph3D = new Graph3D({
             WIN: this.WIN,
         });
 
-        // this.Billiards = new Billiards({
-        //     graph3D: this.graph3D,
-        //     })
+        this.pushX = document.getElementById("inputX");
+        this.pushY = document.getElementById("inputY");
 
-        let FPS = 0;
-        this.FPS = 0;
+        
+        this.powerX = this.pushX - 0;
+        this.powerY = this.pushY - 0;
+        
         this.dx = 0;
         this.dy = 0;
-        let lastTimestamp = Date.now();
-
         this.startPosition()
+        this.render();
 
-        const animLoop = () => {
-            // calc fps 
-            FPS++;
-            const timestamp = Date.now();
-            if (timestamp - lastTimestamp >= 1000) {
-                this.FPS = FPS;
-                FPS = 0;
-                lastTimestamp = timestamp;
-            }
-            // print scene
-            this.calcPlaneEqution(); // получить и записать плоскость экрана
-            this.calcWindowVectors(); // вычислить вектора экрана
-            this.render();
-            requestAnimFrame(animLoop);
+
+
+        const anime = () => {
+                const figure = this.figures[0];
+                let powerX = this.powerX;
+                let powerY = this.powerY;  
+                const modulX = Math.abs(powerX);
+                const modulY = Math.abs(powerY);
+                if (modulX > 0.01 || modulY > 0.01) {
+                    this.buttonPush.disabled = true
+                    this.buttonPush.setAttribute('class', "disablePush disablePush-three")
+                    this.checkTap = !this.checkTap;
+                    //============= POWER Y ================
+                    let gain = modulY / 50;
+                    if (figure.center.y >= 1900 && powerY / modulY == 1) {
+                        powerY = -powerY;
+                    }
+                    else if (figure.center.y <= -1900 && powerY / modulY == -1) {
+                        powerY = -powerY;
+                    }
+                    powerY = this.calcGain(powerY, modulY, gain)
+                    //=========== POWER X ==================
+                    {
+                        let gain = modulX / 50;
+                        // console.log(gain, "  gain")
+                        if (figure.center.x >= 825 && powerX / modulX == 1) {
+                            powerX = -powerX;
+                        }
+                        else if (figure.center.x <= -825 && powerX / modulX == -1) {
+                            powerX = -powerX;
+                        }
+                        // console.log(powerX, '       1')
+                        powerX = this.calcGain(powerX, modulX, gain)
+                        // console.log(powerX, '       2')
+                    }
+                    //======================================
+                    this.moveSceneBall(figure, powerX, powerY, 0);
+                    this.powerX = powerX ;
+                    this.powerY = powerY ;  
+                }
+                
+                else { 
+                    this.checkTap = true
+                    this.buttonPush.setAttribute('class', "btn btn-three");
+                    this.buttonPush.disabled = false;
+                }
+                requestAnimationFrame(anime);
+
         }
-        animLoop();
+        anime()
     }
 
-    /* BounceWall(radians, incRadians) {
-        const result = (2 * incRadians) - radians;
-        return result;
-    } */
 
-    calcGain(power, modul, gain){
-        if (power / modul == 1) {
-           power -= gain;
+    calcGain(power, modul, gain) {
+        const PM = power / modul
+        if (PM == 1 ) {
+            power -= gain;
         }
         else {
-            power += gain;
+            power =  (-power - gain) * -1; //Такая порнография потому что вычисления делаются иначе очень странно
         }
         return power
     }
-    
+
 
 
     //===========================================
 
-    ballMove(figure, powerX = 1, powerY = 0.6) {
-        let modulX = Math.abs(powerX);
-        let modulY = Math.abs(powerY);
-        if (modulX > 0.01 || modulY > 0.01) {
-            //============= POWER Y ================
-            // if (modulY > 0.01) {
-                let gain = modulY / 50;
-                if (figure.center.y > 1800 && powerY/modulY == 1) {
-                    powerY = -powerY;
-                }
-                else if (figure.center.y < -1800 && powerY/modulY == -1) {
-                    powerY = -powerY;
-                }
-                powerY = this.calcGain(powerY, modulY, gain)
-             // }
-            //=========== POWER X ==================
-            // if (modulX > 0.01) 
-            {
-                let gain = modulX / 50;
-                if (figure.center.x >= 600 && powerX/modulX == 1) {
-                    powerX = -powerX;
-                }
-                else if (figure.center.x < -600 && powerX/modulX == -1) {
-                    powerX = -powerX;
-                }
-                powerX = this.calcGain(powerX, modulX, gain)
-            }
-        // }
-        //======================================
-            this.moveSceneBall(figure, powerX, powerY, 0);
 
-            setTimeout(
-                () => {
-                    this.ballMove(figure, powerX, powerY)
-                },
-                5
-            );
-        }
-    }
 
     moveSceneBall(figure, dx = 0, dy = 0, dz = 0) {
         const matrix = this.graph3D.move(dx, dy, dz);
@@ -126,15 +123,16 @@ class BilliardsComponent extends Component {
             this.graph3D.transformation(matrix, figure.center);
             // console.log(figure.center)
         });
+        this.render();
     }
 
-    fixPolusSphere(figure, polygon){
-        for (let i = 0; i < 3; i++){
-            for (let j = i+1; j < 4; j++) {
+    fixPolusSphere(figure, polygon) {
+        for (let i = 0; i < 3; i++) {
+            for (let j = i + 1; j < 4; j++) {
                 if (
                     figure.points[polygon.points[i]].x == figure.points[polygon.points[j]].x &&
                     figure.points[polygon.points[i]].y == figure.points[polygon.points[j]].y &&
-                    figure.points[polygon.points[i]].z == figure.points[polygon.points[j]].z 
+                    figure.points[polygon.points[i]].z == figure.points[polygon.points[j]].z
                 ) {
                     polygon.check = true;
                     break
@@ -150,7 +148,8 @@ class BilliardsComponent extends Component {
 
     startPosition() {
         this.figures = [
-            (new figure).solarSystem(20, 0.25, new Point(0, 0.25, 0), "#1E90FF"),
+            (new figure).solarSystem(20, 0.25, new Point(0, 0, 0), "#000000"),
+            
             /*----------------------------------------------------------------------------------*/
 
             //  (new figure).solarSystem(20, 0.25, new Point(0, 0.25, 6), "#1E90FF"),
@@ -162,24 +161,13 @@ class BilliardsComponent extends Component {
             //  (new figure).Place("#006400", 5, 10, 0, [], new Point(0, 0, 0)),
 
             /*----------------------------------------------------------------------------------*/
-            (new figure).Place("#8B4513", 5, 0.5, 0.25, [], new Point(0, 9.5, 0.25)),
-            (new figure).Place("#8B4513", 5, 0.5, 0.25, [], new Point(0, -9.5, 0.25)),
-            (new figure).Place("#8B4513", 0.5, 10, 0.25, [], new Point(4.5, 0, 0.25)),
-            (new figure).Place("#8B4513", 0.5, 10, 0.25, [], new Point(-4.5, 0, 0.25)),
+            (new figure).Place("#8B4513", 5, 0.5, 0.25, [], new Point(0, 9.5, 0)),
+            (new figure).Place("#8B4513", 5, 0.5, 0.25, [], new Point(0, -9.5, 0)),
+            (new figure).Place("#8B4513", 0.5, 10, 0.25, [], new Point(4.5, 0, 0)),
+            (new figure).Place("#8B4513", 0.5, 10, 0.25, [], new Point(-4.5, 0, 0)),
         ]
-    }
-
-    getProection(point) {
-        const M = this.graph3D.getProection(point);
-        const P2M = this.graph3D.calcVector(this.WIN.P2, M);
-        const cosa = this.graph3D.calcCorner(this.P2P3, M);
-        const cosb = this.graph3D.calcCorner(this.P1P2, M);
-        const module = this.graph3D.calcVectorModule(P2M);
-        // console.log(cosa)
-        return {
-            x: cosa * module,
-            y: cosb * module
-        };
+        // console.log(this.figures[1].center)
+        // console.log(this.figures[0].center)
     }
 
     calcWindowVectors() {
@@ -192,7 +180,11 @@ class BilliardsComponent extends Component {
     }
 
     render() {
+        // this.animLoop()
         // console.log(this.WIN.DISPLAY)
+        this.calcPlaneEqution(); // получить и записать плоскость экрана
+        this.calcWindowVectors(); // вычислить вектора экрана
+
         this.canvas.clear();
         this.allPolygons = [];
         this.figures.forEach((figure, index) => {
@@ -207,7 +199,7 @@ class BilliardsComponent extends Component {
         this.graph3D.sortByArtistAlgoritm(this.allPolygons);
         this.allPolygons.forEach(polygon => {
             const figure = this.figures[polygon.figureIndex];
-            polygon.normal = this.graph3D.multVector(polygon.points, figure);
+            polygon.normal = this.graph3D.calcCenterPolygon(polygon.points, figure);
             const points = polygon.points.map(point => {
                 // console.log(point);
                 return this.getProection(figure.points[point]);
@@ -255,18 +247,48 @@ class BilliardsComponent extends Component {
                 });
             } 
         }); */
-        this.canvas.text(`FPS = ${this.FPS}`, -9, 9, 18);
     };
+
+    transformator(matrix) {
+        // console.log(matrix);
+        this.graph3D.transformation(matrix, this.WIN.CAMERA);
+        this.graph3D.transformation(matrix, this.LIGHT);
+        this.graph3D.transformation(matrix, this.WIN.DISPLAY);
+        this.graph3D.transformation(matrix, this.WIN.P1);
+        this.graph3D.transformation(matrix, this.WIN.P2);
+        this.graph3D.transformation(matrix, this.WIN.P3)
+        this.render()
+    }
 
     _addEventListeners() {
         document.addEventListener('keydown', event => this.keyDownHandler(event));
         document.getElementById('pushBall').addEventListener("click", () => {
-            this.ballMove(this.figures[0]);
+            // this.ballMove(this.figures[0]);
+            this.checkTap = false;
+            this.powerX = this.pushX.value;
+            this.powerY = this.pushY.value;
+            // console.log(this.powerX)
+            // console.log(this.powerX)
         })
         document.getElementById('cleanPlace').addEventListener("click", () => {
             this.startPosition();
+            this.render()
         })
     }
+
+    getProection(point) {
+        const M = this.graph3D.getProection(point);
+        const P2M = this.graph3D.calcVector(this.WIN.P2, M);
+        const cosa = this.graph3D.calcCorner(this.P2P3, M);
+        const cosb = this.graph3D.calcCorner(this.P1P2, M);
+        const module = this.graph3D.calcVectorModule(P2M);
+        // console.log(cosa)
+        return {
+            x: cosa * module,
+            y: cosb * module
+        };
+    }
+
     //===================================================== Действия пользователя =============================================
 
     mouseup(event) {
@@ -292,17 +314,8 @@ class BilliardsComponent extends Component {
 
     }
 
-    transformator(matrix) {
-        // console.log(matrix);
-        this.graph3D.transformation(matrix, this.WIN.CAMERA);
-        this.graph3D.transformation(matrix, this.LIGHT);
-        this.graph3D.transformation(matrix, this.WIN.DISPLAY);
-        this.graph3D.transformation(matrix, this.WIN.P1);
-        this.graph3D.transformation(matrix, this.WIN.P2);
-        this.graph3D.transformation(matrix, this.WIN.P3)
-    }
-
     mousemove(event) {
+        const center =  this.figures[0].center
         // if (this.canMove) {
         //     const gradus = Math.PI / 180 / 4;
 
@@ -315,10 +328,12 @@ class BilliardsComponent extends Component {
         //         this.calcPlaneEqution();
         //         this.transformator(matrix);
         //     }
-        //     this.dx = event.offsetX;
-        //     this.dy = event.offsetY;
+            this.dx = event.offsetX;
+            this.dy = event.offsetY;
+            // console.log(this.dx, this.dy)
+            // this.canvas.printpoint(this.dx, -this.dy);
         // }
-        // console.log(this.WIN.CAMERA)
+        // console.log(this.dx, this.dy)
     }
 
     keyDownHandler(event) {

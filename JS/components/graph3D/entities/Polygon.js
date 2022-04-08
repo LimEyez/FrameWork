@@ -1,10 +1,12 @@
 class Polygon {
-	constructor (points = [], color = '#ffaa22', check = false) {
+	constructor (points = [], color = '#ffaa22', check = false, offDark = false) {
 		this.points = points;
 		this.color = this.hexToRgb(color);
 		this.distance = 0;
 		this.lumen = 1; // ОСвещенность будет меняться [0 - 1]
 		this.check = check
+		this.offDark = offDark
+		
 	}
 
 	hexToRgb (hex) {
